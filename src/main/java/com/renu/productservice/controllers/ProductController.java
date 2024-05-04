@@ -1,10 +1,13 @@
 package com.renu.productservice.controllers;
 
 import com.renu.productservice.dtos.ProductDto;
+import com.renu.productservice.exceptions.InvalidProductIdException;
+import com.renu.productservice.exceptions.ProductControllerSpecificException;
 import com.renu.productservice.models.Product;
 import com.renu.productservice.services.ProductService;
 //import org.springframework.http.HttpStatus;
 //import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +25,7 @@ public class ProductController {
 
     // localhost:8080/products/10
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable("id") Long id){
+    public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) throws InvalidProductIdException {
         Product product = productService.getProductById(id);
         //return new ResponseEntity<>(product, HttpStatusCode.valueOf(200));
         //return new ResponseEntity<>(product, HttpStatus.OK);
@@ -55,5 +58,10 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable("id") Long id){
+    }
+
+    @ExceptionHandler(ProductControllerSpecificException.class)
+    public ResponseEntity<Void> handleProductControllerSpecificException(){
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

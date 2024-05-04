@@ -1,6 +1,7 @@
 package com.renu.productservice.services;
 
 import com.renu.productservice.dtos.ProductDto;
+import com.renu.productservice.exceptions.InvalidProductIdException;
 import com.renu.productservice.models.Category;
 import com.renu.productservice.models.Product;
 import org.springframework.http.HttpMethod;
@@ -31,11 +32,14 @@ public class FakeStoreProductService implements ProductService{
         return product;
     }
     @Override
-    public Product getProductById(Long id) {
+    public Product getProductById(Long id) throws InvalidProductIdException {
         //Call the FakeStore API to get the product with given ID here.
         ProductDto productDto = restTemplate.getForObject("https://fakestoreapi.com/products/"+id, ProductDto.class);
         //Convert productDto to product object.
-        if(null==productDto) return null;
+        if(null==productDto){
+            throw new InvalidProductIdException("Invalid ProductId passed", id);
+        }
+
         return convertProductDtoToProduct(productDto);
     }
 
