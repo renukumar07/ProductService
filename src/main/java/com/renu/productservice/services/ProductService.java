@@ -1,7 +1,7 @@
 package com.renu.productservice.services;
 
+import com.renu.productservice.dtos.ProductDto;
 import com.renu.productservice.models.Product;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -10,6 +10,6 @@ public interface ProductService {
     List<Product> getAllProducts();
     Product createProduct();
     Product updateProduct();
-    Product replaceProduct(Long id, Product product);
+    Product replaceProduct(Long id, ProductDto productDto);
     void deleteProduct();
 }

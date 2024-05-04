@@ -1,9 +1,12 @@
 package com.renu.productservice.services;
 
-import com.renu.productservice.dtos.FakeStoreProductDto;
+import com.renu.productservice.dtos.ProductDto;
 import com.renu.productservice.models.Category;
 import com.renu.productservice.models.Product;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpMessageConverterExtractor;
+import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -15,33 +18,33 @@ public class FakeStoreProductService implements ProductService{
     FakeStoreProductService(RestTemplate restTemplate){
         this.restTemplate = restTemplate;
     }
-    private Product convertFakeStoreProductDtoToProduct(FakeStoreProductDto fakeStoreProductDto){
+    private Product convertProductDtoToProduct(ProductDto productDto) {
         Product product = new Product();
-        product.setId(fakeStoreProductDto.getId());
-        product.setTitle(fakeStoreProductDto.getTitle());
-        product.setDescription(fakeStoreProductDto.getDescription());
-        product.setImage(fakeStoreProductDto.getImage());
-        product.setPrice(fakeStoreProductDto.getPrice());
+        product.setId(productDto.getId());
+        product.setTitle(productDto.getTitle());
+        product.setDescription(productDto.getDescription());
+        product.setImage(productDto.getImage());
+        product.setPrice(productDto.getPrice());
         Category category = new Category();
-        category.setTitle(fakeStoreProductDto.getCategory());
+        category.setTitle(productDto.getCategory());
         product.setCategory(category);
         return product;
     }
     @Override
     public Product getProductById(Long id) {
         //Call the FakeStore API to get the product with given ID here.
-        FakeStoreProductDto fakeStoreProductDto = restTemplate.getForObject("https://fakestoreapi.com/products/"+id, FakeStoreProductDto.class);
-        //Convert fakeStoreProductDto to product object.
-        if(null==fakeStoreProductDto) return null;
-        return convertFakeStoreProductDtoToProduct(fakeStoreProductDto);
+        ProductDto productDto = restTemplate.getForObject("https://fakestoreapi.com/products/"+id, ProductDto.class);
+        //Convert productDto to product object.
+        if(null==productDto) return null;
+        return convertProductDtoToProduct(productDto);
     }
 
     @Override
     public List<Product> getAllProducts() {
-        FakeStoreProductDto[] fakeStoreProductDtos = restTemplate.getForObject("https://fakestoreapi.com/products/", FakeStoreProductDto[].class);
+        ProductDto[] productDtos = restTemplate.getForObject("https://fakestoreapi.com/products/", ProductDto[].class);
         List<Product> products = new ArrayList<>();
-        for(FakeStoreProductDto fakeStoreProductDto: fakeStoreProductDtos){
-            products.add(convertFakeStoreProductDtoToProduct(fakeStoreProductDto));
+        for(ProductDto productDto: productDtos){
+            products.add(convertProductDtoToProduct(productDto));
         }
         return products;
     }
@@ -57,12 +60,20 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public Product replaceProduct(Long id, Product product) {
+    public Product replaceProduct(Long id, ProductDto productDto) {
         //PUT Method
         //Replace the product with given id with the input product
         //and return the updated product in the output.
-        return null;
+
+        //Convert the input into the right request param as per the Requirement
+        RequestCallback requestCallback = restTemplate.httpEntityCallback(productDto, ProductDto.class);
+        HttpMessageConverterExtractor<ProductDto> responseExtractor =
+                new HttpMessageConverterExtractor<>(ProductDto.class, restTemplate.getMessageConverters());
+        ProductDto returnedProductDto = restTemplate.execute("https://fakestoreapi.com/products/"+id, HttpMethod.PUT, requestCallback, responseExtractor);
+        return convertProductDtoToProduct(returnedProductDto);
     }
+
+
 
     @Override
     public void deleteProduct() {
