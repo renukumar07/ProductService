@@ -1,13 +1,12 @@
 package com.renu.productservice.models;
 
+import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Category {
-
-    private Long id;
+@Entity
+public class Category extends BaseModel{
     private String title;
-
 }
