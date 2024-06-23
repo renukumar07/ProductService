@@ -7,6 +7,7 @@ import com.renu.productservice.models.Product;
 import com.renu.productservice.services.ProductService;
 //import org.springframework.http.HttpStatus;
 //import org.springframework.http.HttpStatusCode;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,8 @@ public class ProductController {
 
     private ProductService productService;
 
-    public ProductController(ProductService productService){
+
+    public ProductController(@Qualifier("selfProductService") ProductService productService){
         this.productService = productService;
     }
 
@@ -41,13 +43,13 @@ public class ProductController {
     //create a Product
     @PostMapping
     public Product createProduct(@RequestBody Product product){
-        return new Product();
+        return productService.createProduct(product);
     }
 
     //partial update
     @PatchMapping("/{id}")
-    public Product updateProduct(@PathVariable("id") Long id, @RequestBody ProductDto productDto){
-        return new Product();
+    public Product updateProduct(@PathVariable("id") Long id, @RequestBody Product product){
+        return productService.updateProduct(id, product);
     }
 
     //Replace product

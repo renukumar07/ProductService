@@ -2,7 +2,6 @@ package com.renu.productservice.services;
 
 import com.renu.productservice.dtos.ProductDto;
 import com.renu.productservice.exceptions.InvalidProductIdException;
-import com.renu.productservice.models.Category;
 import com.renu.productservice.models.Product;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service("fakeStoreProductService")
+//@Primary
 public class FakeStoreProductService implements ProductService{
     private RestTemplate restTemplate;
     FakeStoreProductService(RestTemplate restTemplate){
@@ -54,12 +54,12 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public Product createProduct() {
+    public Product createProduct(Product product) {
         return null;
     }
 
     @Override
-    public Product updateProduct() {
+    public Product updateProduct(Long id, Product product) {
         return null;
     }
 
