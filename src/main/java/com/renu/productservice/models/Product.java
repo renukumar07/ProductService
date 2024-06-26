@@ -1,5 +1,6 @@
 package com.renu.productservice.models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
@@ -15,7 +16,7 @@ public class Product extends BaseModel{
 //    private Long id; ---> Moved to Base Model
     private String title;
     private Double price;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Category category;
     private String description;
     private String image;
