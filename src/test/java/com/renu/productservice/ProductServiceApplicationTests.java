@@ -1,6 +1,8 @@
 package com.renu.productservice;
 
+import com.renu.productservice.models.Category;
 import com.renu.productservice.models.Product;
+import com.renu.productservice.repositories.CategoryRepository;
 import com.renu.productservice.repositories.ProductRepository;
 import com.renu.productservice.repositories.projections.ProductWithIdAndTitle;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,9 @@ class ProductServiceApplicationTests {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Test
     void contextLoads() {
@@ -38,12 +43,20 @@ class ProductServiceApplicationTests {
 //        System.out.println(product.getId());
 //        System.out.println(product.getTitle());
 //
-        Product product1 = productRepository.doSomethingSQL();
-        Optional<Product> product1Optional = productRepository.findById(1L);
-        if(product1Optional.isPresent()){
-            Product product2 = product1Optional.get();
-        }
+//        Product product1 = productRepository.doSomethingSQL();
+//        Optional<Product> product1Optional = productRepository.findById(1L);
+//        if(product1Optional.isPresent()){
+//            Product product2 = product1Optional.get();
+//        }
+//
+//        System.out.println("DEBUG");
 
-        System.out.println("DEBUG");
+//        categoryRepository.deleteById(102L);
+
+//        Optional<Category> optionalCategory = categoryRepository.findById(1L);
+//        Category category = optionalCategory.get();
+//        System.out.println("DEBUG");
+//        List<Product> products = category.getProducts();
+//        System.out.println("DEBUG");
     }
 }
