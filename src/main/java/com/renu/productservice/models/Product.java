@@ -20,6 +20,7 @@ public class Product extends BaseModel{
     private Category category; // By default Eager fetch
     private String description;
     private String image;
+    private int quantity;
 }
 
 /*
